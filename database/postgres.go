@@ -8,9 +8,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-var db *sql.DB
-
-func InitDB() {
+func InitDB() *sql.DB {
 	var err error
 	connStr := "host=localhost port=5432 user=root password=root dbname=root sslmode=disable"
 	db, err := sql.Open("postgres", connStr)
@@ -22,4 +20,5 @@ func InitDB() {
 	} else {
 		fmt.Println("Banco conectado")
 	}
+	return db
 }
