@@ -1,24 +1,20 @@
 package database
 
 import (
-	"database/sql"
-	"fmt"
-	"log"
-
+	"github.com/Ulpio/gin-api/models"
 	_ "github.com/lib/pq"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
-func InitDB() *sql.DB {
-	var err error
+var DB *gorm.DB
+
+func ConnectDB() {
 	connStr := "host=localhost port=5432 user=root password=root dbname=root sslmode=disable"
-	db, err := sql.Open("postgres", connStr)
+	db, err := gorm.Open(postgres.Open(connStr), &gorm.Config{})
 	if err != nil {
-		log.Fatal("Falha ao conectar ao banco", err)
+		panic("Erro ao conectar ao banco")
 	}
-	if err = db.Ping(); err != nil {
-		log.Fatal("Banco tá fora do alcance.\n", err)
-	} else {
-		fmt.Println("Banco conectado")
-	}
-	return db
+	db.AutoMigrate(&models.Livro{})
+	DB = db
 }
